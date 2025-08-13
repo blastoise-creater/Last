@@ -11,9 +11,10 @@
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
-            background: #0f0c29; 
+            background: #0f0c29; /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #24243e, #302b63, #0f0c29);
             background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
-            overflow: hidden; 
+            overflow: hidden; /* Prevent scrolling */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -24,14 +25,17 @@
             font-family: 'Tiro Devanagari Hindi', serif;
         }
 
-        /* Full screen presentation container */
+        /* The main container that mimics a PPT slide canvas (16:9 aspect ratio) */
         #presentation-window {
             width: 100vw;
-            height: 100vh;
+            height: 56.25vw; /* 16:9 Aspect Ratio */
+            max-height: 100vh;
+            max-width: 177.78vh; /* 16:9 Aspect Ratio */
             position: relative;
             box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
             border-radius: 1rem;
-            overflow: hidden;
+            overflow: hidden; /* Crucial for slide transitions */
         }
 
         /* Individual slide styling */
@@ -54,165 +58,274 @@
             transform: translateX(100%); /* Start off-screen to the right */
         }
         
-        .slide.previous { transform: translateX(-100%); z-index:1; }
-        .slide.active { transform: translateX(0); z-index:2; }
+        /* Positioning for previous and active slides */
+        .slide.previous {
+            transform: translateX(-100%); /* Move off-screen to the left */
+            z-index: 1;
+        }
 
+        .slide.active {
+            transform: translateX(0); /* Move to center */
+            z-index: 2;
+        }
+        
+        /* Content container within a slide */
         .slide-content {
-            background: rgba(0,0,0,0.4);
+            background: rgba(0, 0, 0, 0.4);
             padding: 2rem 3rem;
             border-radius: 1rem;
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.18);
-            box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
-            max-width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            max-width: 80%;
             transform-style: preserve-3d;
         }
 
-        /* Text animations */
+        /* --- Animations for text elements --- */
         @keyframes fadeInDown {
             from { opacity: 0; transform: translate3d(0, -40px, 0); }
-            to { opacity: 1; transform: translate3d(0,0,0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
         }
         @keyframes fadeInUp {
             from { opacity: 0; transform: translate3d(0, 40px, 0); }
-            to { opacity: 1; transform: translate3d(0,0,0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
         }
-        .active .anim-fade-in-down { animation: fadeInDown 0.8s 0.3s cubic-bezier(0.215, 0.61, 0.355, 1) both; }
-        .active .anim-fade-in-up { animation: fadeInUp 0.8s 0.5s cubic-bezier(0.215, 0.61, 0.355, 1) both; }
+
+        .active .anim-fade-in-down {
+            animation: fadeInDown 0.8s 0.3s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+        }
+        .active .anim-fade-in-up {
+            animation: fadeInUp 0.8s 0.5s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+        }
         .active .stagger-1 { animation-delay: 0.7s; }
         .active .stagger-2 { animation-delay: 0.9s; }
 
-        /* Animated shapes */
+        /* --- Animated background shapes --- */
         .shapes-container {
             position: absolute;
-            top:0; left:0;
-            width:100%; height:100%;
-            overflow:hidden;
-            z-index:0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
         }
         .shape {
-            position:absolute;
-            list-style:none;
-            display:block;
-            background: rgba(255,255,255,0.1);
+            position: absolute;
+            list-style: none;
+            display: block;
+            background: rgba(255, 255, 255, 0.1);
             animation: float 20s linear infinite;
-            bottom:-150px;
+            bottom: -150px;
         }
-        .shape.s1 { left:10%; width:80px; height:80px; animation-delay:0s; }
-        .shape.s2 { left:20%; width:30px; height:30px; animation-delay:2s; animation-duration:10s; }
-        .shape.s3 { left:25%; width:100px; height:100px; animation-delay:4s; }
-        .shape.s4 { left:40%; width:60px; height:60px; animation-delay:0s; animation-duration:18s; }
-        .shape.s5 { left:65%; width:20px; height:20px; animation-delay:0s; }
-        .shape.s6 { left:75%; width:110px; height:110px; animation-delay:3s; }
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); opacity:1; border-radius:0; }
-            100% { transform: translateY(-1000px) rotate(720deg); opacity:0; border-radius:50%; }
-        }
+        .shape.s1 { left: 10%; width: 80px; height: 80px; animation-delay: 0s; }
+        .shape.s2 { left: 20%; width: 30px; height: 30px; animation-delay: 2s; animation-duration: 10s; }
+        .shape.s3 { left: 25%; width: 100px; height: 100px; animation-delay: 4s; }
+        .shape.s4 { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
+        .shape.s5 { left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
+        .shape.s6 { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
 
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; border-radius: 0; }
+            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; border-radius: 50%; }
+        }
+        
         /* Progress Bar */
         #progress-bar-container {
             position: absolute;
-            bottom:0; left:0;
-            width:100%; height:6px;
-            background: rgba(0,0,0,0.3);
-            z-index:10;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 10;
         }
         #progress-bar {
-            width:0%;
-            height:100%;
+            width: 0%;
+            height: 100%;
             background: linear-gradient(90deg, #FF9933, #FFFFFF, #138808);
-            transition: width 0.7s cubic-bezier(0.76,0,0.24,1);
+            transition: width 0.7s cubic-bezier(0.76, 0, 0.24, 1);
         }
     </style>
 </head>
 <body>
 
-<div id="presentation-window">
-    <!-- Animated Background Shapes -->
-    <ul class="shapes-container">
-        <li class="shape s1"></li><li class="shape s2"></li><li class="shape s3"></li>
-        <li class="shape s4"></li><li class="shape s5"></li><li class="shape s6"></li>
-    </ul>
+    <div id="presentation-window">
+        <!-- Animated Background Shapes -->
+        <ul class="shapes-container">
+            <li class="shape s1"></li><li class="shape s2"></li><li class="shape s3"></li>
+            <li class="shape s4"></li><li class="shape s5"></li><li class="shape s6"></li>
+        </ul>
 
-    <!-- Slide 1: Title -->
-    <div class="slide active" style="background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=2070&auto=format&fit=crop');">
-        <div class="slide-content">
-            <h1 class="hindi text-6xl md:text-8xl font-black anim-fade-in-down" style="color: #FF9933;">स्वदेश</h1>
-            <p class="hindi text-2xl md:text-3xl mt-4 anim-fade-in-up">गयाप्रसाद शुक्ल 'सनेही'</p>
-            <p class="text-lg mt-8 anim-fade-in-up stagger-1 opacity-70">प्रस्तुति शुरू करने के लिए क्लिक करें</p>
-        </div>
-    </div>
-
-    <!-- Slide 2: Author Intro -->
-    <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1613635955749-c353139b3783?q=80&w=1974&auto=format&fit=crop');">
-        <div class="slide-content flex flex-col md:flex-row items-center gap-8">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/8d/Placeholder_person.png"
-                 alt="गयाप्रसाद शुक्ल 'सनेही'"
-                 class="w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg anim-fade-in-down">
-            <div class="text-left">
-                 <h2 class="hindi text-4xl font-bold mb-4 anim-fade-in-down" style="color: #FF9933;">कवि से परिचय</h2>
-                 <p class="hindi text-xl md:text-2xl leading-relaxed anim-fade-in-up">
-                    'स्वदेश' कविता के रचयिता गयाप्रसाद शुक्ल 'सनेही' (1883-1972) हिंदी के उन कवियों में से हैं जिन्होंने ब्रजभाषा से खड़ी बोली में आकर श्रेष्ठ कवियों में अपना स्थान बनाया। उनका जन्म उत्तर प्रदेश के उन्नाव जनपद में हुआ।
-                 </p>
+        <!-- Slide 1: Title -->
+        <div class="slide active" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=2070&auto=format&fit=crop');">
+            <div class="slide-content">
+                <h1 class="hindi text-6xl md:text-8xl font-black anim-fade-in-down" style="color: #FF9933;">स्वदेश</h1>
+                <p class="hindi text-2xl md:text-3xl mt-4 anim-fade-in-up">गयाप्रसाद शुक्ल 'सनेही'</p>
+                <p class="text-lg mt-8 anim-fade-in-up stagger-1 opacity-70">प्रस्तुति शुरू करने के लिए क्लिक करें</p>
             </div>
         </div>
+
+        <!-- Slide 2: Author Intro -->
+        <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1613635955749-c353139b3783?q=80&w=1974&auto=format&fit=crop');">
+            <div class="slide-content flex flex-col md:flex-row items-center gap-8">
+                <img src="https://placehold.co/400x400/1a202c/ffffff?text=गयाप्रसाद+शुक्ल+'सनेही'&font=hindi" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/400x400/1a202c/ffffff?text=लेखक&font=hindi';"
+                     alt="गयाप्रसाद शुक्ल 'सनेही'" class="w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg anim-fade-in-down">
+                <div class="text-left">
+                     <h2 class="hindi text-4xl font-bold mb-4 anim-fade-in-down" style="color: #FF9933;">कवि से परिचय</h2>
+                     <p class="hindi text-xl md:text-2xl leading-relaxed anim-fade-in-up">
+                        'स्वदेश' कविता के रचयिता गयाप्रसाद शुक्ल 'सनेही' (1883-1972) हिंदी के उन कवियों में से हैं जिन्होंने ब्रजभाषा से खड़ी बोली में आकर श्रेष्ठ कवियों में अपना स्थान बनाया। उनका जन्म उत्तर प्रदेश के उन्नाव जनपद में हुआ।
+                     </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 3: Poem Stanza 1 -->
+        <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=2093&auto=format&fit=crop');">
+            <div class="slide-content">
+                <p class="hindi text-4xl md:text-5xl leading-relaxed font-bold anim-fade-in-down">जो भरा नहीं है भावों से,<br>बहती जिसमें रस-धार नहीं।</p>
+                <p class="hindi text-5xl md:text-6xl mt-8 leading-relaxed font-black anim-fade-in-up" style="color: #FF9933;">वह हृदय नहीं है पत्थर है,<br>जिसमें स्वदेश का प्यार नहीं।</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Poem Stanza 2 & 3 -->
+        <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2070&auto=format&fit=crop');">
+            <div class="slide-content">
+                <p class="hindi text-3xl md:text-4xl leading-relaxed font-bold anim-fade-in-down">जो जीवित जोश जगा न सका,<br>उस जीवन में कुछ सार नहीं।</p>
+                <p class="hindi text-3xl md:text-4xl mt-6 leading-relaxed font-bold anim-fade-in-up">जो चल न सका संसार-संग,<br>उसका होता संसार नहीं।</p>
+            </div>
+        </div>
+        
+        <!-- Slide 5: Poem Stanza 4 & 5 -->
+        <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1569428034239-f9565f18a280?q=80&w=2070&auto=format&fit=crop');">
+            <div class="slide-content">
+                <p class="hindi text-3xl md:text-4xl leading-relaxed font-bold anim-fade-in-down">जिसने साहस को छोड़ दिया,<br>वह पहुँच सकेगा पार नहीं।</p>
+                <p class="hindi text-3xl md:text-4xl mt-6 leading-relaxed font-bold anim-fade-in-up">जिससे न जाति-उद्धार हुआ,<br>होगा उसका उद्धार नहीं।</p>
+            </div>
+        </div>
+        
+        <!-- Slide 6: Poem Stanza 6 & 7 -->
+        <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1547499417-29395a4a08da?q=80&w=2070&auto=format&fit=crop');">
+            <div class="slide-content">
+                <p class="hindi text-3xl md:text-4xl leading-relaxed font-bold anim-fade-in-down">जिसकी मिट्टी में उगे बढ़े,<br>पाया जिसमें दाना-पानी।</p>
+                <p class="hindi text-3xl md:text-4xl mt-6 leading-relaxed font-bold anim-fade-in-up">हैं माता-पिता बंधु जिसमें,<br>हम हैं जिसके राजा-रानी।।</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Poem Stanza 8 & 9 -->
+        <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1627895439379-373f990a13a3?q=80&w=2070&auto=format&fit=crop');">
+            <div class="slide-content">
+                <p class="hindi text-3xl md:text-4xl leading-relaxed font-bold anim-fade-in-down">जिसने कि खजाने खोले हैं,<br>नव रत्न दिये हैं लासानी।</p>
+                <p class="hindi text-3xl md:text-4xl mt-6 leading-relaxed font-bold anim-fade-in-up">जिस पर ज्ञानी भी मरते हैं,<br>जिस पर है दुनिया दीवानी।।</p>
+            </div>
+        </div>
+        
+        <!-- Slide 8: Poem Stanza 10 -->
+        <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1508921340878-ba53e1f416ec?q=80&w=1974&auto=format&fit=crop');">
+            <div class="slide-content">
+                <p class="hindi text-4xl md:text-5xl leading-relaxed font-bold anim-fade-in-up">उस पर है नहीं पसीजा जो,<br>क्या है वह भू का भार नहीं।</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Poem Stanza 11 -->
+        <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1596622184333-c8a1fe1661da?q=80&w=1974&auto=format&fit=crop');">
+            <div class="slide-content">
+                <p class="hindi text-3xl md:text-4xl leading-relaxed font-bold anim-fade-in-down">निश्चित है निस्संशय निश्चित,<br>है जान एक दिन जाने को।</p>
+                <p class="hindi text-3xl md:text-4xl mt-6 leading-relaxed font-bold anim-fade-in-up">है काल-दीप जलता हरदम,<br>जल जाना है परवानों को।।</p>
+            </div>
+        </div>
+        
+        <!-- Slide 10: Poem Stanza 12 -->
+        <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1605391899233-674a5a5457c2?q=80&w=2070&auto=format&fit=crop');">
+            <div class="slide-content">
+                <p class="hindi text-4xl md:text-5xl leading-relaxed font-bold anim-fade-in-down">सब कुछ है अपने हाथों में,<br>क्या तोप नहीं तलवार नहीं।</p>
+                 <p class="hindi text-5xl md:text-6xl mt-8 leading-relaxed font-black anim-fade-in-up" style="color: #FF9933;">वह हृदय नहीं है, पत्थर है,<br> जिसमें स्वदेश का प्यार नहीं।</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: End Slide -->
+        <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1593107934495-55a0b7a869a8?q=80&w=2070&auto=format&fit=crop');">
+            <div class="slide-content">
+                <h2 class="hindi text-7xl font-bold anim-fade-in-down" style="color: #138808;">जय हिंद!</h2>
+                <p class="text-2xl mt-4 anim-fade-in-up">प्रस्तुति समाप्त</p>
+                <button id="restart-btn" class="mt-8 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 anim-fade-in-up stagger-1 cursor-pointer">
+                    पुनः आरंभ करें
+                </button>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div id="progress-bar-container">
+            <div id="progress-bar"></div>
+        </div>
     </div>
 
-    <!-- Slide 3 onwards remain the same with same structure -->
+    <script>
+        const presentation = document.getElementById('presentation-window');
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress-bar');
+        const restartBtn = document.getElementById('restart-btn');
+        
+        let currentSlide = 0;
+        const totalSlides = slides.length;
 
-    <!-- Progress Bar -->
-    <div id="progress-bar-container">
-        <div id="progress-bar"></div>
-    </div>
-</div>
+        function updateView(isRestarting = false) {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'previous');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else if (index < currentSlide) {
+                    slide.classList.add('previous');
+                }
+            });
+            
+            // Update progress bar
+            const progressPercentage = isRestarting ? 0 : ((currentSlide) / (totalSlides - 1)) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+        }
 
-<script>
-const presentation = document.getElementById('presentation-window');
-const slides = document.querySelectorAll('.slide');
-const progressBar = document.getElementById('progress-bar');
-const restartBtn = document.getElementById('restart-btn');
-let currentSlide = 0;
-const totalSlides = slides.length;
+        function next() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateView();
+            }
+        }
 
-function updateView(isRestarting=false){
-    slides.forEach((slide,index)=>{
-        slide.classList.remove('active','previous');
-        if(index===currentSlide) slide.classList.add('active');
-        else if(index<currentSlide) slide.classList.add('previous');
-    });
-    const progressPercentage = isRestarting ? 0 : ((currentSlide)/(totalSlides-1))*100;
-    progressBar.style.width = `${progressPercentage}%`;
-}
+        function restart() {
+            currentSlide = 0;
+            // A small timeout to allow the transition to complete before resetting styles
+            setTimeout(() => {
+                updateView(true); // pass true to reset progress bar immediately
+            }, 100);
+        }
 
-function next(){
-    if(currentSlide<totalSlides-1){
-        currentSlide++;
+        // --- Event Listeners ---
+        presentation.addEventListener('click', (e) => {
+            // Only advance slide if not clicking the restart button
+            if (e.target.id !== 'restart-btn') {
+                next();
+            }
+        });
+
+        restartBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent the main click listener from firing
+            restart();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') { // Spacebar also advances
+                next();
+            } else if (e.key === 'ArrowLeft') {
+                // To go back, we can implement a prev() function if needed
+                // For now, it's one-way as requested
+            }
+        });
+
+        // Initialize
         updateView();
-    }
-}
-
-function restart(){
-    currentSlide=0;
-    setTimeout(()=>{ updateView(true); },100);
-}
-
-presentation.addEventListener('click',e=>{
-    if(e.target.id!=='restart-btn') next();
-});
-
-if(restartBtn){
-    restartBtn.addEventListener('click',e=>{
-        e.stopPropagation();
-        restart();
-    });
-}
-
-document.addEventListener('keydown',e=>{
-    if(e.key==='ArrowRight'||e.key===' ') next();
-});
-updateView();
-</script>
+    </script>
 
 </body>
-  </html>
+    </html>
