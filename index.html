@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>स्वदेश - एक प्रस्तुति</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&family=Tiro+Devanagari+Hindi:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles for the body */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background: #0f0c29; 
+            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+            overflow: hidden; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .hindi {
+            font-family: 'Tiro Devanagari Hindi', serif;
+        }
+
+        /* Full screen presentation container */
+        #presentation-window {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        /* Individual slide styling */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 5%;
+            text-align: center;
+            background-size: cover;
+            background-position: center;
+            color: white;
+            transition: transform 0.7s cubic-bezier(0.76, 0, 0.24, 1);
+            transform: translateX(100%); /* Start off-screen to the right */
+        }
+        
+        .slide.previous { transform: translateX(-100%); z-index:1; }
+        .slide.active { transform: translateX(0); z-index:2; }
+
+        .slide-content {
+            background: rgba(0,0,0,0.4);
+            padding: 2rem 3rem;
+            border-radius: 1rem;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.18);
+            box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
+            max-width: 90%;
+            transform-style: preserve-3d;
+        }
+
+        /* Text animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translate3d(0, -40px, 0); }
+            to { opacity: 1; transform: translate3d(0,0,0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translate3d(0, 40px, 0); }
+            to { opacity: 1; transform: translate3d(0,0,0); }
+        }
+        .active .anim-fade-in-down { animation: fadeInDown 0.8s 0.3s cubic-bezier(0.215, 0.61, 0.355, 1) both; }
+        .active .anim-fade-in-up { animation: fadeInUp 0.8s 0.5s cubic-bezier(0.215, 0.61, 0.355, 1) both; }
+        .active .stagger-1 { animation-delay: 0.7s; }
+        .active .stagger-2 { animation-delay: 0.9s; }
+
+        /* Animated shapes */
+        .shapes-container {
+            position: absolute;
+            top:0; left:0;
+            width:100%; height:100%;
+            overflow:hidden;
+            z-index:0;
+        }
+        .shape {
+            position:absolute;
+            list-style:none;
+            display:block;
+            background: rgba(255,255,255,0.1);
+            animation: float 20s linear infinite;
+            bottom:-150px;
+        }
+        .shape.s1 { left:10%; width:80px; height:80px; animation-delay:0s; }
+        .shape.s2 { left:20%; width:30px; height:30px; animation-delay:2s; animation-duration:10s; }
+        .shape.s3 { left:25%; width:100px; height:100px; animation-delay:4s; }
+        .shape.s4 { left:40%; width:60px; height:60px; animation-delay:0s; animation-duration:18s; }
+        .shape.s5 { left:65%; width:20px; height:20px; animation-delay:0s; }
+        .shape.s6 { left:75%; width:110px; height:110px; animation-delay:3s; }
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity:1; border-radius:0; }
+            100% { transform: translateY(-1000px) rotate(720deg); opacity:0; border-radius:50%; }
+        }
+
+        /* Progress Bar */
+        #progress-bar-container {
+            position: absolute;
+            bottom:0; left:0;
+            width:100%; height:6px;
+            background: rgba(0,0,0,0.3);
+            z-index:10;
+        }
+        #progress-bar {
+            width:0%;
+            height:100%;
+            background: linear-gradient(90deg, #FF9933, #FFFFFF, #138808);
+            transition: width 0.7s cubic-bezier(0.76,0,0.24,1);
+        }
+    </style>
+</head>
+<body>
+
+<div id="presentation-window">
+    <!-- Animated Background Shapes -->
+    <ul class="shapes-container">
+        <li class="shape s1"></li><li class="shape s2"></li><li class="shape s3"></li>
+        <li class="shape s4"></li><li class="shape s5"></li><li class="shape s6"></li>
+    </ul>
+
+    <!-- Slide 1: Title -->
+    <div class="slide active" style="background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=2070&auto=format&fit=crop');">
+        <div class="slide-content">
+            <h1 class="hindi text-6xl md:text-8xl font-black anim-fade-in-down" style="color: #FF9933;">स्वदेश</h1>
+            <p class="hindi text-2xl md:text-3xl mt-4 anim-fade-in-up">गयाप्रसाद शुक्ल 'सनेही'</p>
+            <p class="text-lg mt-8 anim-fade-in-up stagger-1 opacity-70">प्रस्तुति शुरू करने के लिए क्लिक करें</p>
+        </div>
+    </div>
+
+    <!-- Slide 2: Author Intro -->
+    <div class="slide" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1613635955749-c353139b3783?q=80&w=1974&auto=format&fit=crop');">
+        <div class="slide-content flex flex-col md:flex-row items-center gap-8">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/8d/Placeholder_person.png"
+                 alt="गयाप्रसाद शुक्ल 'सनेही'"
+                 class="w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg anim-fade-in-down">
+            <div class="text-left">
+                 <h2 class="hindi text-4xl font-bold mb-4 anim-fade-in-down" style="color: #FF9933;">कवि से परिचय</h2>
+                 <p class="hindi text-xl md:text-2xl leading-relaxed anim-fade-in-up">
+                    'स्वदेश' कविता के रचयिता गयाप्रसाद शुक्ल 'सनेही' (1883-1972) हिंदी के उन कवियों में से हैं जिन्होंने ब्रजभाषा से खड़ी बोली में आकर श्रेष्ठ कवियों में अपना स्थान बनाया। उनका जन्म उत्तर प्रदेश के उन्नाव जनपद में हुआ।
+                 </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3 onwards remain the same with same structure -->
+
+    <!-- Progress Bar -->
+    <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+    </div>
+</div>
+
+<script>
+const presentation = document.getElementById('presentation-window');
+const slides = document.querySelectorAll('.slide');
+const progressBar = document.getElementById('progress-bar');
+const restartBtn = document.getElementById('restart-btn');
+let currentSlide = 0;
+const totalSlides = slides.length;
+
+function updateView(isRestarting=false){
+    slides.forEach((slide,index)=>{
+        slide.classList.remove('active','previous');
+        if(index===currentSlide) slide.classList.add('active');
+        else if(index<currentSlide) slide.classList.add('previous');
+    });
+    const progressPercentage = isRestarting ? 0 : ((currentSlide)/(totalSlides-1))*100;
+    progressBar.style.width = `${progressPercentage}%`;
+}
+
+function next(){
+    if(currentSlide<totalSlides-1){
+        currentSlide++;
+        updateView();
+    }
+}
+
+function restart(){
+    currentSlide=0;
+    setTimeout(()=>{ updateView(true); },100);
+}
+
+presentation.addEventListener('click',e=>{
+    if(e.target.id!=='restart-btn') next();
+});
+
+if(restartBtn){
+    restartBtn.addEventListener('click',e=>{
+        e.stopPropagation();
+        restart();
+    });
+}
+
+document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' ') next();
+});
+updateView();
+</script>
+
+</body>
+  </html>
